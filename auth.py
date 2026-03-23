@@ -8,6 +8,7 @@ DEFAULT_PASSWORD = "Pratik@123"
 # Add or remove approved users here. Email matching is case-insensitive.
 ALLOWED_USERS = [
     "pratik.adsare@pattern.com",
+    "ajinkya.sable@pattern.com"
     # "kunal.adsare@pattern.com",
 ]
 
