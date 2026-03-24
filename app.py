@@ -607,7 +607,8 @@ def inject_login_css():
 
     </style>
     """, unsafe_allow_html=True)
-    def inject_panel_height_css(panel_height: int) -> None:
+    
+def inject_panel_height_css(panel_height: int) -> None:
     safe_height = max(panel_height, DASHBOARD_PANEL_MIN_HEIGHT)
     st.markdown(
         f"""
