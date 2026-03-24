@@ -502,130 +502,116 @@ def inject_css() -> None:
         unsafe_allow_html=True,
     )
 
-
 def inject_login_css() -> None:
     st.markdown(
         """
         <style>
-            :root {
-                color-scheme: light;
-            }
-            html, body, [data-testid="stAppViewContainer"], .stApp {
+            .stApp {
                 background: #f5f8ff;
-                color: #0f172a;
             }
-            body, [data-testid="stAppViewContainer"] {
-                overflow: hidden;
+
+            [data-testid="stAppViewContainer"] {
+                background: #f5f8ff;
             }
+
             [data-testid="stHeader"] {
                 background: transparent;
             }
+
             section.main > div.block-container {
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
                 max-width: none !important;
-                width: 100%;
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0 !important;
             }
-            .login-shell {
-                width: 100%;
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 20px 16px 56px;
-                box-sizing: border-box;
+
+            .login-page-spacer-top {
+                height: 6vh;
             }
-            .login-inner {
-                width: 100%;
-                max-width: 360px;
-            }
-            .login-card-frame {
-                width: 100%;
+
+            .login-card {
+                width: 360px;
                 padding: 30px;
                 border-radius: 18px;
                 background: white;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-                border: 1px solid #e5e7eb;
                 box-sizing: border-box;
+                margin: 0 auto;
             }
+
             .login-title {
-                margin: 0 0 5px 0;
-                font-size: 1.55rem;
+                margin-bottom: 5px;
+                font-size: 2rem;
                 font-weight: 800;
                 color: #0f172a;
                 line-height: 1.2;
             }
+
             .login-subtitle {
                 font-size: 14px;
                 color: #666;
-                margin: 0 0 20px 0;
-                line-height: 1.45;
+                margin-bottom: 20px;
+                line-height: 1.5;
             }
+
             .login-note {
                 font-size: 12px;
                 color: #888;
                 margin-top: 15px;
                 text-align: center;
-                line-height: 1.45;
+                line-height: 1.5;
             }
+
             .login-footer {
-                position: fixed;
-                bottom: 15px;
-                left: 0;
-                width: 100%;
                 text-align: center;
                 font-size: 12px;
                 color: #777;
-                pointer-events: none;
+                margin-top: 28px;
+                margin-bottom: 10px;
             }
+
+            div[data-testid="stForm"] {
+                border: none !important;
+                padding: 0 !important;
+                background: transparent !important;
+            }
+
             div[data-testid="stTextInput"] label p {
-                font-size: 13px;
+                font-size: 13px !important;
                 color: #0f172a !important;
             }
-            div[data-testid="stTextInput"] {
-                margin-bottom: 0.35rem !important;
-            }
+
             div[data-testid="stTextInput"] input {
-                width: 100%;
-                padding: 10px !important;
                 border-radius: 8px !important;
                 border: 1px solid #ccc !important;
                 background: white !important;
                 color: #0f172a !important;
-                box-sizing: border-box;
+                padding: 10px !important;
             }
-            div[data-testid="stFormSubmitButton"] > button {
-                width: 100%;
+
+            div[data-testid="stFormSubmitButton"] button {
+                width: 100% !important;
                 padding: 12px !important;
                 background: #0053e2 !important;
                 color: white !important;
                 border: none !important;
                 border-radius: 10px !important;
                 font-weight: bold !important;
-                box-shadow: none !important;
             }
-            div[data-testid="stForm"] {
-                margin-top: 0.05rem;
-            }
-            @media (max-height: 820px) {
-                .login-card-frame {
+
+            @media (max-width: 640px) {
+                .login-card {
+                    width: 92vw;
                     padding: 24px;
                 }
+
                 .login-title {
-                    font-size: 1.4rem;
-                }
-                .login-subtitle {
-                    margin-bottom: 16px;
+                    font-size: 1.7rem;
                 }
             }
         </style>
         """,
         unsafe_allow_html=True,
     )
-
 def inject_panel_height_css(panel_height: int) -> None:
     safe_height = max(panel_height, DASHBOARD_PANEL_MIN_HEIGHT)
     st.markdown(
@@ -2394,35 +2380,53 @@ def logout_user() -> None:
     st.session_state.row_count = DEFAULT_ROWS
     st.rerun()
 
-
 def render_login_page() -> None:
     inject_login_css()
-    st.markdown('<div class="login-shell"><div class="login-inner">', unsafe_allow_html=True)
-    st.markdown('<div class="login-card-frame">', unsafe_allow_html=True)
-    st.markdown(f'<h2 class="login-title">{APP_TITLE}</h2>', unsafe_allow_html=True)
-    st.markdown(
-        '<p class="login-subtitle">Only approved @pattern.com users can access this tool</p>',
-        unsafe_allow_html=True,
-    )
-    with st.form('login_form', clear_on_submit=False):
-        email = st.text_input('Email Address', placeholder='you@pattern.com', key='login_email')
-        password = st.text_input('Password', type='password', placeholder='Enter password', key='login_password')
-        submitted = st.form_submit_button('Sign In', use_container_width=True)
-    if submitted:
-        ok, message = authenticate_user(email, password)
-        if ok:
-            normalized_email = normalize_email(email)
-            st.session_state.authenticated = True
-            st.session_state.user_email = normalized_email
-            st.session_state.user_name = get_display_name(normalized_email)
-            st.rerun()
-        else:
-            st.error(message)
-    st.markdown(
-        '<p class="login-note">New to this page? Please contact Pratik Adsare for creating your login credential</p>',
-        unsafe_allow_html=True,
-    )
-    st.markdown('</div></div></div>', unsafe_allow_html=True)
+
+    st.markdown('<div class="login-page-spacer-top"></div>', unsafe_allow_html=True)
+
+    left, center, right = st.columns([1.2, 1, 1.2])
+
+    with center:
+        st.markdown(
+            f"""
+            <div class="login-card">
+                <h2 class="login-title">{APP_TITLE}</h2>
+                <p class="login-subtitle">Only approved @pattern.com users can access this tool</p>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        with st.form("login_form", clear_on_submit=False):
+            email = st.text_input(
+                "Email Address",
+                placeholder="you@pattern.com",
+                key="login_email",
+            )
+            password = st.text_input(
+                "Password",
+                type="password",
+                placeholder="Enter password",
+                key="login_password",
+            )
+            submitted = st.form_submit_button("Sign In", use_container_width=True)
+
+        if submitted:
+            ok, message = authenticate_user(email, password)
+            if ok:
+                normalized_email = normalize_email(email)
+                st.session_state.authenticated = True
+                st.session_state.user_email = normalized_email
+                st.session_state.user_name = get_display_name(normalized_email)
+                st.rerun()
+            else:
+                st.error(message)
+
+        st.markdown(
+            '<p class="login-note">New to this page? Please contact Pratik Adsare for creating your login credential</p></div>',
+            unsafe_allow_html=True,
+        )
+
     st.markdown(
         '<div class="login-footer">© Designed and Developed by Pratik Adsare</div>',
         unsafe_allow_html=True,
