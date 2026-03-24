@@ -502,117 +502,112 @@ def inject_css() -> None:
         unsafe_allow_html=True,
     )
 
-def inject_login_css() -> None:
-    st.markdown(
-        """
-        <style>
-            .stApp {
-                background: #f5f8ff;
-            }
+def inject_login_css():
+    import streamlit as st
+    st.markdown("""
+    <style>
 
-            [data-testid="stAppViewContainer"] {
-                background: #f5f8ff;
-            }
+    .stApp {
+        background: linear-gradient(180deg,#02060f 0%,#030b18 100%);
+    }
 
-            [data-testid="stHeader"] {
-                background: transparent;
-            }
+    section.main > div.block-container {
+        padding-top: 0rem !important;
+        padding-bottom: 0rem !important;
+        max-width: none !important;
+    }
 
-            section.main > div.block-container {
-                padding-top: 0 !important;
-                padding-bottom: 0 !important;
-                max-width: none !important;
-            }
+    /* Center wrapper */
+    .login-wrapper {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
 
-            .login-page-spacer-top {
-                height: 6vh;
-            }
+    /* Star background */
+    .login-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle, rgba(24,160,251,0.35) 1px, transparent 1px);
+        background-size: 120px 120px;
+        opacity: 0.25;
+    }
 
-            .login-card {
-                width: 360px;
-                padding: 30px;
-                border-radius: 18px;
-                background: white;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-                box-sizing: border-box;
-                margin: 0 auto;
-            }
+    /* Title */
+    .login-title {
+        font-size: 48px;
+        font-weight: 800;
+        color: white;
+        text-align: center;
+        margin-bottom: 8px;
+    }
 
-            .login-title {
-                margin-bottom: 5px;
-                font-size: 2rem;
-                font-weight: 800;
-                color: #0f172a;
-                line-height: 1.2;
-            }
+    .login-subtitle {
+        font-size: 18px;
+        color: #d7dde8;
+        text-align: center;
+        margin-bottom: 30px;
+    }
 
-            .login-subtitle {
-                font-size: 14px;
-                color: #666;
-                margin-bottom: 20px;
-                line-height: 1.5;
-            }
+    /* Card */
+    .login-card {
+        width: 360px;
+        background: rgba(17,22,31,0.9);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+        backdrop-filter: blur(8px);
+        z-index: 2;
+    }
 
-            .login-note {
-                font-size: 12px;
-                color: #888;
-                margin-top: 15px;
-                text-align: center;
-                line-height: 1.5;
-            }
+    /* Inputs */
+    div[data-testid="stTextInput"] input {
+        background: #0d1320 !important;
+        color: white !important;
+        border: 1px solid rgba(255,255,255,0.12) !important;
+        border-radius: 10px !important;
+        padding: 10px !important;
+    }
 
-            .login-footer {
-                text-align: center;
-                font-size: 12px;
-                color: #777;
-                margin-top: 28px;
-                margin-bottom: 10px;
-            }
+    div[data-testid="stTextInput"] label {
+        color: #dfe7f3 !important;
+        font-size: 14px !important;
+    }
 
-            div[data-testid="stForm"] {
-                border: none !important;
-                padding: 0 !important;
-                background: transparent !important;
-            }
+    /* Button */
+    div[data-testid="stFormSubmitButton"] button {
+        width: 100% !important;
+        padding: 12px !important;
+        background: #18a0fb !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+    }
 
-            div[data-testid="stTextInput"] label p {
-                font-size: 13px !important;
-                color: #0f172a !important;
-            }
+    .login-note {
+        font-size: 12px;
+        color: #b8c4d6;
+        text-align: center;
+        margin-top: 16px;
+    }
 
-            div[data-testid="stTextInput"] input {
-                border-radius: 8px !important;
-                border: 1px solid #ccc !important;
-                background: white !important;
-                color: #0f172a !important;
-                padding: 10px !important;
-            }
+    .login-footer {
+        position: absolute;
+        bottom: 12px;
+        color: #9fb0c8;
+        font-size: 12px;
+        text-align: center;
+    }
 
-            div[data-testid="stFormSubmitButton"] button {
-                width: 100% !important;
-                padding: 12px !important;
-                background: #0053e2 !important;
-                color: white !important;
-                border: none !important;
-                border-radius: 10px !important;
-                font-weight: bold !important;
-            }
-
-            @media (max-width: 640px) {
-                .login-card {
-                    width: 92vw;
-                    padding: 24px;
-                }
-
-                .login-title {
-                    font-size: 1.7rem;
-                }
-            }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-def inject_panel_height_css(panel_height: int) -> None:
+    </style>
+    """, unsafe_allow_html=True)
+    def inject_panel_height_css(panel_height: int) -> None:
     safe_height = max(panel_height, DASHBOARD_PANEL_MIN_HEIGHT)
     st.markdown(
         f"""
@@ -2380,58 +2375,51 @@ def logout_user() -> None:
     st.session_state.row_count = DEFAULT_ROWS
     st.rerun()
 
-def render_login_page() -> None:
+def render_login_page():
+    import streamlit as st
+
     inject_login_css()
 
-    st.markdown('<div class="login-page-spacer-top"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="login-wrapper">', unsafe_allow_html=True)
 
-    left, center, right = st.columns([1.2, 1, 1.2])
+    st.markdown("""
+        <div class="login-title">Walmart Content Extractor</div>
+        <div class="login-subtitle">
+            Only approved @pattern.com users can access this tool
+        </div>
+    """, unsafe_allow_html=True)
 
-    with center:
-        st.markdown(
-            f"""
-            <div class="login-card">
-                <h2 class="login-title">{APP_TITLE}</h2>
-                <p class="login-subtitle">Only approved @pattern.com users can access this tool</p>
-            """,
-            unsafe_allow_html=True,
-        )
+    st.markdown('<div class="login-card">', unsafe_allow_html=True)
 
-        with st.form("login_form", clear_on_submit=False):
-            email = st.text_input(
-                "Email Address",
-                placeholder="you@pattern.com",
-                key="login_email",
-            )
-            password = st.text_input(
-                "Password",
-                type="password",
-                placeholder="Enter password",
-                key="login_password",
-            )
-            submitted = st.form_submit_button("Sign In", use_container_width=True)
+    with st.form("login_form"):
+        email = st.text_input("Email Address", placeholder="you@pattern.com")
+        password = st.text_input("Password", type="password", placeholder="Enter password")
+        submit = st.form_submit_button("Sign In")
 
-        if submitted:
-            ok, message = authenticate_user(email, password)
-            if ok:
-                normalized_email = normalize_email(email)
-                st.session_state.authenticated = True
-                st.session_state.user_email = normalized_email
-                st.session_state.user_name = get_display_name(normalized_email)
-                st.rerun()
-            else:
-                st.error(message)
+    if submit:
+        ok, message = authenticate_user(email, password)
+        if ok:
+            st.session_state.authenticated = True
+            st.session_state.user_email = email
+            st.rerun()
+        else:
+            st.error(message)
 
-        st.markdown(
-            '<p class="login-note">New to this page? Please contact Pratik Adsare for creating your login credential</p></div>',
-            unsafe_allow_html=True,
-        )
+    st.markdown("""
+        <div class="login-note">
+            New to this page? Please contact Pratik Adsare for creating your login credential
+        </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown(
-        '<div class="login-footer">© Designed and Developed by Pratik Adsare</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown('</div>', unsafe_allow_html=True)
 
+    st.markdown("""
+        <div class="login-footer">
+            © Designed and Developed by Pratik Adsare
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('</div>', unsafe_allow_html=True)
 def render_header(user_name: str, user_email: str) -> None:
     left, right = st.columns([4.1, 1.2], gap='large')
     with left:
@@ -2457,7 +2445,6 @@ def render_header(user_name: str, user_email: str) -> None:
         )
         if st.button('Log Out', key='logout_button'):
             logout_user()
-
 
 def render_attribute_selector() -> Tuple[List[str], bool, bool]:
     with st.container(border=True):
